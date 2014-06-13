@@ -1,4 +1,4 @@
-#include "at898252.h"
+#include "at89s8253.h"
 
 #define IN P0
 #define OUT_H P1
@@ -38,21 +38,21 @@ void read(){
     int i;
     for(i = 0; i < 4; i++){
         unsigned char temp = getFromIn();
-        show(temp);
         if(temp <= 0xF){
             leftOperand <<= 4;
-            leftOperand|= temp;
+            leftOperand |= temp;
+            show(leftOperand);
         }
 
         else{
             switch(temp){
             case CLEAR: reset();
-                read();
-                break;
+                	return;
             case EQUALS: operator = NO_OPERATION;
-                return;
-            default: operator = temp;
-                goto secondInput;
+                	return;
+            default: 	operator = temp;
+            		show(operator);
+                	goto secondInput;
             }
         }
     }
@@ -68,10 +68,10 @@ void read(){
 
 secondInput:for(i = 0; i < 4; i++){
         unsigned char temp = getFromIn();
-        show(temp);
         if(temp <= 0xF){
-            leftOperand <<= 4;
-            leftOperand|= temp;
+            rightOperand <<= 4;
+            rightOperand |= temp;
+            show(rightOperand);
         }
         else{
             switch(temp){
